@@ -12,7 +12,7 @@ WSGI Middleware that implements a customizable 'harakiri' like uWSGI.
 
 
 Installation
-============
+------------
 
 Use **pip**:
 
@@ -23,7 +23,7 @@ Use **pip**:
 Tested on Python 2.7, 3.4, and 3.5.
 
 Usage
-=====
+-----
 
 Wrap your WSGI application with the middleware, for example for a Django
 application in your ``wsgi.py``:
@@ -49,10 +49,10 @@ used, so this **cannot** be combined with other things that use it, e.g. the
 'harakiri' functionality in uWSGI.
 
 API
-===
+---
 
 ``HarakiriMiddleware(application, timeout=30, on_harakiri=None, error_app=None)``
----------------------------------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Wraps a WSGI application with the harakiri functionality.
 
@@ -97,7 +97,7 @@ Example usage with all arguments:
     )
 
 ``Harakiri``
-------------
+~~~~~~~~~~~~
 
 This is the exception that gets raised when a timeout occurs. You should
 **not** catch it anywhere in your code, however you could use it to detect when
