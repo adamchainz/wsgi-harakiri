@@ -5,6 +5,8 @@ import signal
 
 import six
 
+__version__ = '1.0.0'
+
 
 class HarakiriMiddleware(object):
 
@@ -12,15 +14,15 @@ class HarakiriMiddleware(object):
         self.app = app
 
         if not isinstance(timeout, six.integer_types):
-            raise ValueError("Timeout must be an integer.")
+            raise ValueError("'timeout' must be an integer.")
         if on_harakiri is not None:
             if not callable(on_harakiri):
-                raise ValueError("on_harakiri must be a callable.")
+                raise ValueError("'on_harakiri' must be a callable.")
         self.context = HarakiriContext(timeout, on_harakiri)
 
         if error_app is not None:
             if not callable(error_app):
-                raise ValueError("error_app must be a callable.")
+                raise ValueError("'error_app' must be a callable.")
             self.error_app = error_app
         else:
             self.error_app = simple_timeout_app

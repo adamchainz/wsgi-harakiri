@@ -6,6 +6,7 @@ import subprocess
 import time
 from contextlib import contextmanager
 
+import pytest
 import requests
 
 from wsgi_harakiri import HarakiriMiddleware
@@ -27,7 +28,7 @@ def test_times_out():
     with run_gunicorn('app_times_out'):
         resp = requests.get('http://localhost:8000')
         assert resp.status_code == 500
-        assert 'Page load timeout' in resp.content
+        assert b'Page load timeout' in resp.content
 
 
 def app_times_out(environ, start_response):
@@ -40,7 +41,7 @@ def test_does_not_time_out():
     with run_gunicorn('app_does_not_time_out'):
         resp = requests.get('http://localhost:8000')
         assert resp.status_code == 200
-        assert resp.content == '<h1>Fine</h1>'
+        assert resp.content == b'<h1>Fine</h1>'
 
 
 def app_does_not_time_out(environ, start_response):
@@ -58,7 +59,7 @@ def test_custom_handler():
         resp = requests.get('http://localhost:8000')
         # Error page from gunicorn itself
         assert resp.status_code == 500
-        assert '<h1><p>Internal Server Error</p></h1>' in resp.content
+        assert b'<h1><p>Internal Server Error</p></h1>' in resp.content
 
 
 def app_custom_handler(environ, start_response):
@@ -75,7 +76,7 @@ def test_custom_error():
     with run_gunicorn('app_custom_error'):
         resp = requests.get('http://localhost:8000')
         assert resp.status_code == 418
-        assert resp.content == "I'm a teapot"
+        assert resp.content == b"I'm a teapot"
 
 
 def app_custom_error(environ, start_response):
@@ -91,3 +92,21 @@ def custom_error(environ, start_response):
 
 
 app_custom_error = HarakiriMiddleware(app_custom_error, 1, error_app=custom_error)
+
+
+def test_timeout_must_be_integer():
+    with pytest.raises(ValueError) as excinfo:
+        HarakiriMiddleware(None, 1.5)
+    assert "'timeout' must be an integer." in str(excinfo.value)
+
+
+def test_on_harakiri_must_be_callable():
+    with pytest.raises(ValueError) as excinfo:
+        HarakiriMiddleware(None, on_harakiri=13)
+    assert "'on_harakiri' must be a callable." in str(excinfo.value)
+
+
+def test_error_app_must_be_callable():
+    with pytest.raises(ValueError) as excinfo:
+        HarakiriMiddleware(None, error_app=13)
+    assert "'error_app' must be a callable." in str(excinfo.value)
