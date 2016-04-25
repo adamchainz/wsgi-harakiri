@@ -51,7 +51,7 @@ setup(
     include_package_data=True,
     keywords='WSGI, Harakiri',
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 7 - Inactive',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: ISC License (ISCL)',
         'Natural Language :: English',

@@ -2,6 +2,12 @@
 WSGI Harakiri
 =============
 
+**Abandoned**
+
+Don't use this, it's not the best way to achieve a request timeout. You're
+probably better off using and improving any such feature built into your wsgi
+server, since it will terminate things more reliably.
+
 .. image:: https://img.shields.io/pypi/v/wsgi-harakiri.svg
         :target: https://pypi.python.org/pypi/wsgi-harakiri
 
